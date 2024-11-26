@@ -78,17 +78,17 @@ const handleLogoClick = () => {
 
 <template>
   <nav class="fixed top-0 left-0 right-0 z-50 transition-colors duration-300 
-              bg-gradient-to-b from-white/95 to-white/90 dark:from-gray-900 dark:to-gray-900/95 
+              bg-gradient-to-b from-white/98 to-white/95 dark:from-gray-900 dark:to-gray-900
               backdrop-blur-md border-b border-gray-100 dark:border-gray-800">
     <div class="container mx-auto px-8">
       <div class="flex items-center justify-between h-16">
         <!-- Logo 添加点击事件 -->
         <div 
-          class="flex items-center space-x-3 cursor-pointer hover:opacity-80 transition-opacity duration-300" 
+          class="flex items-center space-x-3 cursor-pointer hover:opacity-90 transition-opacity duration-300" 
           @click="handleLogoClick"
         >
           <img src="/vite.svg" class="h-8 w-8" alt="Logo" />
-          <span class="text-xl font-bold text-gray-900 dark:text-white">双碳平台</span>
+          <span class="text-xl font-bold text-gray-800 dark:text-gray-100">双碳招投标平台</span>
         </div>
 
         <!-- 导航链接 -->
@@ -133,4 +133,4 @@ const handleLogoClick = () => {
       </div>
     </div>
   </nav>
-</template> 
+</template>
