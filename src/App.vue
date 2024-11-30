@@ -28,7 +28,6 @@ import TheNavbar from '@/components/TheNavbar.vue'
   opacity: 0;
 }
 
-/* 确保容器占满宽度 */
 .el-container {
   min-height: 100vh;
   width: 100vw;

@@ -29,12 +29,6 @@ const categories = [
     count: 234,
     desc: '政府及企业采购信息'
   },
-  { 
-    id: 4, 
-    name: '项目公示',
-    count: 167,
-    desc: '重点项目信息公示'
-  }
 ]
 
 const isExpanded = ref(false)
@@ -109,14 +103,14 @@ const getCategoryIcon = (id) => {
               </div>
             </div>
             <!-- 数量标签改造 -->
-            <div :class="[
+            <!-- <div :class="[
               'px-2 py-1 rounded-full text-xs',
               activeCategory === category.id
                 ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400'
                 : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
             ]">
               {{ category.count }}
-            </div>
+            </div> -->
           </div>
         </div>
       </div>

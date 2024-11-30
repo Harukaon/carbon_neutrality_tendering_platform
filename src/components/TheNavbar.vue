@@ -6,7 +6,7 @@ import { useRouter, useRoute } from 'vue-router'
 const navItems = [
   { name: '首页', path: '/home' },
   { name: '动态菜单', path: '/bids' },
-  { name: '数据统计', path: '/news' },
+  { name: '数据统计', path: '/datastatistics' },
 
 ]
 
@@ -78,7 +78,7 @@ const handleLogoClick = () => {
 
 <template>
   <nav class="fixed top-0 left-0 right-0 z-50 transition-colors duration-300 
-              bg-gradient-to-b from-white/98 to-white/95 dark:from-gray-900 dark:to-gray-900
+              bg-gradient-to-b from-white/[0.98] to-white/[0.98] dark:from-gray-900/[0.98] dark:to-gray-900/[0.98]
               backdrop-blur-md border-b border-gray-100 dark:border-gray-800">
     <div class="container mx-auto px-8">
       <div class="flex items-center justify-between h-16">
@@ -124,10 +124,10 @@ const handleLogoClick = () => {
           </button>
 
           <button class="px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-300">
-            登录
+            
           </button>
-          <button class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors duration-300">
-            注册
+          <button class="px-4 py-2 text-sm font-medium text-white  rounded-lg  transition-colors duration-300">
+            
           </button>
         </div>
       </div>

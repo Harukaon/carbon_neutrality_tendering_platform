@@ -22,9 +22,14 @@ const routes = [
     component: () => import('@/views/Bids/components/BidsDetail.vue')
   },
   {
-    path: '/announcement/:id',
+    path: '/announcementdetail/:id',
     name: 'AnnouncementDetail',
-    component: () => import('@/views/home/components/AnnouncementList.vue')
+    component: () => import('@/views/home/components/AnnouncementDetail.vue')
+  },
+  {
+    path: '/datastatistics',
+    name: 'DataStatistics',
+    component: () => import('@/views/DataStatistics/DataStatistics.vue')
   }
 ]
 

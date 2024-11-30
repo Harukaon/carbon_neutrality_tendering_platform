@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import CategoryList from './components/CategoryList.vue'
 import AnnouncementList from './components/AnnouncementList.vue'
 
@@ -69,21 +69,28 @@ const handleCategoryChange = (categoryId) => {
 }
 
 // 添加新的动画控制
-import { onMounted } from 'vue'
 import { stagger, animate } from 'motion'
 
-onMounted(() => {
-  // 为统计数据添加入场动画
-  animate('.stat-item', 
-    { opacity: [0, 1], y: [20, 0] },
-    { duration: 0.5, delay: stagger(0.1) }
-  )
+onMounted(async () => {
+  // 等待下一个 DOM 更新周期
+  await nextTick()
   
-  // 为政策要点添加入场动画
-  animate('.policy-card', 
-    { opacity: [0, 1], y: [40, 0] },
-    { duration: 0.6, delay: stagger(0.15) }
-  )
+  // 确保元素存在后再执行动画
+  const statItems = document.querySelectorAll('.stat-item')
+  if (statItems.length) {
+    animate(statItems, 
+      { opacity: [0, 1], y: [20, 0] },
+      { duration: 0.5, delay: stagger(0.1) }
+    )
+  }
+  
+  const policyCards = document.querySelectorAll('.policy-card')
+  if (policyCards.length) {
+    animate(policyCards, 
+      { opacity: [0, 1], y: [40, 0] },
+      { duration: 0.6, delay: stagger(0.15) }
+    )
+  }
 })
 </script>
 
@@ -168,8 +175,9 @@ onMounted(() => {
     <div class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-t border-b border-gray-200 dark:border-gray-700">
       <div class="container mx-auto px-6">
         <!-- 标题和统计数据 -->
-        <div class="py-12 border-b border-gray-200/70 dark:border-gray-700/70">
-          <div class="flex items-center justify-between mb-12">
+      
+
+        <div class="flex items-center justify-between mb-12">
             <div class="flex items-center space-x-4">
               <div class="w-1.5 h-8 bg-gradient-to-b from-blue-600 to-blue-400 rounded-full"></div>
               <h2 class="text-2xl font-bold text-gray-900 dark:text-white">信息公告</h2>
@@ -178,34 +186,9 @@ onMounted(() => {
               及时发布双碳相关项目招标信息
             </p>
           </div>
-
-          <!-- 统计数据优化 -->
-          <div class="grid grid-cols-4 gap-8">
-            <div 
-              v-for="(stat, index) in statistics" 
-              :key="index"
-              class="stat-item relative group"
-            >
-              <div class="flex flex-col p-6 rounded-xl bg-gray-50 dark:bg-gray-700/50 
-                          hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors duration-300
-                          border border-gray-100 dark:border-gray-600">
-                <div class="text-4xl font-bold text-gray-900 dark:text-white mb-2 
-                           group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                  {{ stat.value }}
-                  <span class="text-sm font-medium text-green-500 dark:text-green-400 ml-2">
-                    {{ stat.trend }}
-                  </span>
-                </div>
-                <div class="text-base text-gray-600 dark:text-gray-400">
-                  {{ stat.label }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <!-- 分类和列表区域优化 -->
         <div class="py-12 grid grid-cols-12 gap-8">
+          
           <!-- 左侧分类 -->
           <div class="col-span-3 space-y-6">
             <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
@@ -221,23 +204,9 @@ onMounted(() => {
               <h3 class="text-base font-medium text-gray-900 dark:text-white mb-4 flex items-center space-x-2
                          pb-3 border-b border-gray-200 dark:border-gray-700">
                 <el-icon class="text-blue-500"><TrendCharts /></el-icon>
-                <span>数据统计</span>
+                <!-- <span>数据统计</span> -->
               </h3>
-              <div class="space-y-4">
-                <div 
-                  v-for="stat in statistics" 
-                  :key="stat.label"
-                  class="flex justify-between items-center p-3 rounded-lg
-                         bg-gray-50 dark:bg-gray-700/50
-                         border border-gray-100 dark:border-gray-600"
-                >
-                  <span class="text-gray-600 dark:text-gray-400">{{ stat.label }}</span>
-                  <div class="flex items-center space-x-2">
-                    <span class="font-medium text-gray-900 dark:text-white">{{ stat.value }}</span>
-                    <span class="text-green-500 text-sm">{{ stat.trend }}</span>
-                  </div>
-                </div>
-              </div>
+         
             </div>
           </div>
 

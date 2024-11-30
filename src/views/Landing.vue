@@ -1,26 +1,45 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import * as echarts from 'echarts'
+import { getProjectData, getCarbonTendency } from '@/api/api'
 
 // 实时数据
-const realtimeData = ref({
-  totalProjects: '23,890',
-  totalAmount: '1,523.6',
-  carbonReduction: '856.2',
-  energySaving: '35.8'
-})
+const realtimeData = ref()
 
 // 获取当前主题状态
 const isDark = computed(() => document.documentElement.classList.contains('dark'))
 
-// 图表初始化
-onMounted(() => {
-  initCarbonChart()
-})
+const MygetProjectData = async () => {
+  const res = await getProjectData()
+  realtimeData.value = res
+  realtimeData.value.energySaveRate = (realtimeData.value.energySaveRate * 100).toFixed(2)
+  console.log(realtimeData.value)
+}
 
+const MygetCarbonTendency = async () => {
+  const res = await getCarbonTendency()
+  const sortedData = Object.entries(res).sort(([a], [b]) => new Date(a) - new Date(b))
+  const dates = sortedData.map(([date]) => date)
+  const values = sortedData.map(([, value]) => value)
+  
+  // 更新图表数据
+  myChart.setOption({
+    xAxis: {
+      data: dates
+    },
+    series: [{
+      data: values
+    }]
+  })
+  console.log(res)
+}
+
+let myChart
+
+// 图表初始化
 const initCarbonChart = () => {
   const chartDom = document.getElementById('carbonChart')
-  const myChart = echarts.init(chartDom)
+  myChart = echarts.init(chartDom)
   
   const option = {
     backgroundColor: 'transparent',
@@ -42,7 +61,7 @@ const initCarbonChart = () => {
     },
     xAxis: {
       type: 'category',
-      data: ['1月', '2月', '3月', '4月', '5月', '6月'],
+      data: [], // 初始为空，稍后更新
       axisLine: {
         lineStyle: {
           color: isDark.value ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
@@ -66,7 +85,7 @@ const initCarbonChart = () => {
     series: [
       {
         name: '碳排放量',
-        data: [150, 230, 224, 218, 135, 147],
+        data: [], // 初始为空，稍后更新
         type: 'line',
         smooth: true,
         symbol: 'circle',
@@ -138,27 +157,11 @@ const initCarbonChart = () => {
   })
 }
 
-// 项目分类数据
-const projectTypes = [
-  {
-    icon: 'el-icon-office-building',
-    title: '工业节能改造',
-    desc: '助力工业企业实现节能减排',
-    count: 1200
-  },
-  // ... 添加其他项目类型
-]
-
-// 最新动态数据
-const newsItems = [
-  {
-    type: '政策动态',
-    date: '2024-03-20',
-    title: '国家发改委发布新能源项目招标公告',
-    desc: '为推进新能源项目建设，促进能源结构优化升级...'
-  },
-  // ... 添加其他新闻
-]
+onMounted(() => {
+  initCarbonChart()
+  MygetProjectData()
+  MygetCarbonTendency()
+})
 </script>
 
 <template>
@@ -224,7 +227,7 @@ const newsItems = [
 
           <div class="w-7/12 pl-16">
             <div class="grid grid-cols-2 gap-6 mb-8">
-              <div v-for="(item, index) in Object.entries(realtimeData)" 
+              <div v-if="realtimeData" v-for="(item, index) in Object.entries(realtimeData)" 
                    :key="index"
                    class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 hover:border-blue-500/50 transition-all duration-300 group shadow-sm hover:shadow-md"
               >
@@ -242,15 +245,15 @@ const newsItems = [
                     <div class="text-2xl font-bold text-gray-900 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                       {{ item[1] }}
                       <span class="text-sm text-gray-500 dark:text-gray-400 ml-1">
-                        {{ index === 1 ? '亿元' : index === 2 ? '万吨' : index === 3 ? '%' : '' }}
+                        {{ index === 1 ? '元' : index === 2 ? '%' : index === 3 ? '吨' : '' }}
                       </span>
                     </div>
                     <div class="text-sm text-gray-500 dark:text-gray-400">
                       {{ 
                         index === 0 ? '累计招标项目' :
                         index === 1 ? '总投资额' :
-                        index === 2 ? '碳减排量' :
-                        '能源节约率'
+                        index === 2 ? '能源节约率' :
+                        '碳减排量'
                       }}
                     </div>
                   </div>
