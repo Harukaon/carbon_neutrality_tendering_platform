@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import {getAnnouncementDetailById} from '@/api/api'
+import maskText from '@/utils/mask'
 const route = useRoute()
 const announcementDetailId = route.params.id
 const getAnnouncementDetail = async () => {
@@ -40,17 +41,17 @@ const detail = ref()
           </div>
           
           <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-            {{ detail.title }}
+            {{ maskText(detail.title) }}
           </h1>
           
           <div class="flex flex-wrap gap-4 text-sm text-gray-500 dark:text-gray-400 mb-6 pb-6 border-b border-gray-900 dark:border-gray-700">
             <div class="flex items-center">
               <el-icon class="mr-2"><Document /></el-icon>
-              <span>项目编号：{{ detail.projectNumber }}</span>
+              <span>项目编号：{{ maskText(detail.projectNumber) }}</span>
             </div>
             <div class="flex items-center">
               <el-icon class="mr-2"><OfficeBuilding /></el-icon>
-              <span>招标单位：{{ detail.tenderUnit }}</span>
+              <span>招标单位：{{ maskText(detail.tenderUnit) }}</span>
             </div>
             <!-- <div class="flex items-center">
               <el-icon class="mr-2"><Clock /></el-icon>

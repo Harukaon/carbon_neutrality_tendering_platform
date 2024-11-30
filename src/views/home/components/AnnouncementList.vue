@@ -22,13 +22,13 @@
             :to="`/announcementdetail/${item.id}`"
             class="text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 font-medium truncate"
           >
-            {{ item.title }}
+            {{ maskText(item.title) }}
           </router-link>
         </div>
 
         <!-- 发布单位 -->
         <div class="col-span-2 flex items-center">
-          <span class="text-gray-600 dark:text-gray-400 truncate">{{ item.publishingUnit }}</span>
+          <span class="text-gray-600 dark:text-gray-400 truncate">{{ maskText(item.publishingUnit) }}</span>
         </div>
 
         <!-- 发布时间 -->
@@ -91,6 +91,7 @@ import { getAnnouncementTitlesByCategoryWithPagination } from '@/api/api'
 import { onMounted } from 'vue'
 import dayjs from 'dayjs' // 添加 dayjs 导入
 import { watch } from 'vue'
+import maskText from '@/utils/mask'
 // 每次加载的数量
 const ITEMS_PER_LOAD = 5
 

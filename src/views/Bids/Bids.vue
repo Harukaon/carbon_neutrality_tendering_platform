@@ -5,7 +5,7 @@ import { getAllArticles,getArticlesByType } from '@/api/api'
 import { onMounted } from 'vue'
 import BidsDetail from './components/BidsDetail.vue'
 import { Reading, Clock, Document } from '@element-plus/icons-vue'
-
+import maskText from '@/utils/mask'
 const router = useRouter()
 
 // 动态数据列表
@@ -164,7 +164,7 @@ onMounted(() => {
               <div class="flex-1">
                 <div class="flex items-start justify-between mb-2">
                   <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300 line-clamp-1">
-                    {{ item.title }}
+                    {{ maskText(item.title) }}
                   </h3>
                 
                 </div>
@@ -175,7 +175,7 @@ onMounted(() => {
                   </span>
                   <span class="flex items-center">
                     <el-icon class="mr-1.5"><Document /></el-icon>
-                    {{ item.issuingDepartment }}
+                    {{ maskText(item.issuingDepartment) }}
                   </span>
                 </div>
               </div>
