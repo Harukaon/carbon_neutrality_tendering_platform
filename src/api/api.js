@@ -127,6 +127,7 @@ export const getAllSalesPlans = () => {
     method: 'get',
   })
 }
+
 // 右上数据
 export const getAllSalesStatistics = () => {
   return request({
@@ -134,14 +135,15 @@ export const getAllSalesStatistics = () => {
     method: 'get',
   })
 }
-// 右下数据
+
+// 右中数据
 export const getAllSalespersons = () => {
   return request({
     url: `/salesperson/getAllSalespersons`,
     method: 'get',
   })
 }
-// 生产计划数据
+// 右下
 export const getAllProductionPlans = () => {
   return request({
     url: `/productionPlan/getAllProductionPlans`,

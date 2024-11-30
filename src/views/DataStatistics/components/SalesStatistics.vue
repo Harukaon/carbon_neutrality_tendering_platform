@@ -8,19 +8,37 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import * as echarts from 'echarts'
 import { watch } from 'vue'
-// 图表实例引用
+import { getAllSalesStatistics } from '@/api/api'
+
 const chartRef = ref(null)
 let chartInstance = null
 
-// 模拟数据 - 实际项目中应该通过API获取
-const mockData = {
-  dates: ['1月', '2月', '3月', '4月', '5月', '6月'],
-  series: [
-    {
-      name: '销售额',
-      data: [150, 230, 224, 218, 135, 147]
+// 实际数据状态
+const salesData = ref({
+  dates: [],
+  series: [{
+    name: '销售额',
+    data: []
+  }]
+})
+
+// 获取销售数据
+const fetchSalesData = async () => {
+  try {
+    const data = await getAllSalesStatistics()
+    // 处理API返回的数据
+    salesData.value = {
+      dates: data.map(item => new Date(item.date).toLocaleDateString('zh-CN', { month: 'long' })),
+      series: [{
+        name: '销售额',
+        data: data.map(item => item.sales)
+      }]
     }
-  ]
+    // 更新图表
+    chartInstance?.setOption(initChartOption())
+  } catch (error) {
+    console.error('获取销售数据失败:', error)
+  }
 }
 
 // 获取主题颜色配置
@@ -61,7 +79,7 @@ const initChartOption = () => {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: mockData.dates,
+      data: salesData.value.dates,
       axisLabel: {
         color: themeColors.textColor
       }
@@ -91,9 +109,8 @@ const initChartOption = () => {
         name: '销售额',
         type: 'line',
         stack: '总量',
-        smooth: true, // 平滑曲线
+        smooth: true,
         areaStyle: {
-          // 面积渐变色配置
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
             {
               offset: 0,
@@ -108,7 +125,7 @@ const initChartOption = () => {
         emphasis: {
           focus: 'series'
         },
-        data: mockData.series[0].data
+        data: salesData.value.series[0].data
       }
     ]
   }
@@ -118,7 +135,7 @@ const initChartOption = () => {
 const initChart = () => {
   if (chartRef.value) {
     chartInstance = echarts.init(chartRef.value)
-    chartInstance.setOption(initChartOption())
+    fetchSalesData()  // 获取并加载实际数据
 
     // 监听主题变化
     const observer = new MutationObserver(() => {
